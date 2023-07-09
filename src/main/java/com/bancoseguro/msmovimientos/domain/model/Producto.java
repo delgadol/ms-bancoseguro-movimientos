@@ -1,17 +1,21 @@
 package com.bancoseguro.msmovimientos.domain.model;
 
+import com.bancoseguro.msmovimientos.utils.GrupoProducto;
+import com.bancoseguro.msmovimientos.utils.TipoProducto;
+
 import lombok.Data;
 
 @Data
-public abstract class Producto {
+public class Producto {
 	
-	private String grupoProducto;
+	private String id;
 	
-	private String codigoProducto;
+	private GrupoProducto grupoProducto;
 	
-	private Integer indEleiminado;
+	private TipoProducto tipoProducto;
 	
-	private Integer estadoProducto;
+	private String codigoProducto ;
 	
+	private String estado ;
 
 }

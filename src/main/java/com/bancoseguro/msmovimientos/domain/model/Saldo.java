@@ -2,6 +2,7 @@ package com.bancoseguro.msmovimientos.domain.model;
 
 import org.springframework.data.annotation.Id;
 
+import com.bancoseguro.msmovimientos.utils.GrupoProducto;
 import com.bancoseguro.msmovimientos.utils.TipoProducto;
 
 import lombok.Data;
@@ -13,6 +14,8 @@ public class Saldo {
 	private String id;
 	
 	private String codControl;
+	
+	private GrupoProducto grupoProdcuto;
 	
 	private TipoProducto tipoProducto;
 	

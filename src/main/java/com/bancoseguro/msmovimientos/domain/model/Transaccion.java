@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 
+import com.bancoseguro.msmovimientos.utils.GrupoProducto;
 import com.bancoseguro.msmovimientos.utils.ResultadoTransaccion;
 import com.bancoseguro.msmovimientos.utils.TipoOperacion;
 import com.bancoseguro.msmovimientos.utils.TipoProducto;
@@ -17,6 +18,8 @@ public class Transaccion {
 	private String id;
 	
 	private String codControl;
+	
+	private GrupoProducto grupoProducto;
 	
 	private TipoProducto tipoProducto;
 	
