@@ -1,8 +1,8 @@
 package com.bancoseguro.msmovimientos.domain.dto.res;
 
-import lombok.Data;
 
-@Data
-public class SaldoRes {
+public class SaldoRes extends TransaccionRes {
+	
+	
 
 }

@@ -17,5 +17,11 @@ public class Producto {
 	private String codigoProducto ;
 	
 	private String estado ;
+	
+	private String tipoCliente;
+	
+	private Integer maxOperacionesMes;
+	
+	private Integer minDiaMesOperacion;
 
 }
