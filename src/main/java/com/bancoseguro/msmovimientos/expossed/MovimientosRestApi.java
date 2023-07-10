@@ -14,6 +14,7 @@ import com.bancoseguro.msmovimientos.domain.dto.res.SaldoRes;
 import com.bancoseguro.msmovimientos.domain.dto.res.TransaccionRes;
 
 import jakarta.validation.Valid;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -25,19 +26,24 @@ public class MovimientosRestApi {
 	
 	@GetMapping("/{idProducto}/saldo")
 	public Mono<SaldoRes> getProductBalance(@PathVariable(name="idProducto") String idProdcuto){
-		return null;
+		return servTransaccion.getProductBalance(idProdcuto);
 	}
 	
 	
-	@PostMapping("/clientes/{idCliente}/resumenes")
-	public Mono<TransaccionRes> getAllBalanceByClientId(@PathVariable(name="idCliente") String idCliente){
-		return null;
+	@GetMapping("/clientes/{idCliente}/resumenes")
+	public Flux<SaldoRes> getAllBalanceByClientId(@PathVariable(name="idCliente") String idCliente){
+		return servTransaccion.getAllBalanceByClientId(idCliente);
 	}
 	
 	
 	@PostMapping("")
 	public Mono<TransaccionRes> postTransaccion(@Valid @RequestBody InfoTransacionReq transaccion){
 		return servTransaccion.postTransaccion(transaccion);
+	}
+	
+	@GetMapping("/{idProducto}")
+	public Flux<TransaccionRes> getAllTransaccionByProductID(@PathVariable(name="idProducto") String idProducto){
+		return servTransaccion.getAllTransaccionByProductID(idProducto);
 	}
 	
 	

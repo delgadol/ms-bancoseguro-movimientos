@@ -23,7 +23,7 @@ import com.bancoseguro.msmovimientos.utils.ModelMapperUtils;
 import com.bancoseguro.msmovimientos.utils.ResultadoTransaccion;
 import com.bancoseguro.msmovimientos.utils.TipoOperacion;
 
-
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -54,17 +54,27 @@ public class MovimientosServiceImpl implements MovimientoService {
                     System.out.println("Error: " + statusCode);
                 });
 	}
-	
-	@Override
+    
+        
+    
+    @Override
 	public Mono<SaldoRes> getProductBalance(String idProdcuto) {
-		// TODO Auto-generated method stub
-		return null;
+		return getProdcuctosApi(idProdcuto)
+				.flatMap(productoApi -> {
+					return servSaldoRep.findFirstByCodigoProducto(idProdcuto)
+							.flatMap(entidad -> {
+								return Mono.just(ModelMapperUtils.map(entidad,SaldoRes.class));
+							});							
+				});
 	}
 
+    
 	@Override
-	public Mono<TransaccionRes> getAllBalanceByClientId(String idCliente) {
-		// TODO Auto-generated method stub
-		return null;
+	public Flux<SaldoRes> getAllBalanceByClientId(String idCliente) {
+		return servSaldoRep.findAllByIdPersona(idCliente)
+				.flatMap(saldoDisp ->{
+					return Mono.just(ModelMapperUtils.map(saldoDisp, SaldoRes.class)).flux();
+				});
 	}
 
 	@Override
@@ -98,9 +108,9 @@ public class MovimientosServiceImpl implements MovimientoService {
 												if (nuevoSaldo.getSaldoActual()>=transaccion.getMontoOperacion()) {
 													nuevaTransaccion.setResultadoTransaccion(ResultadoTransaccion.APROBADA);
 													nuevoSaldo.setSaldoActual(nuevoSaldo.getSaldoActual() - transaccion.getMontoOperacion());
-												} else {
-													nuevaTransaccion.setResultadoTransaccion(ResultadoTransaccion.APROBADA);
-												}
+												} 
+											}else {
+												nuevaTransaccion.setResultadoTransaccion(ResultadoTransaccion.APROBADA);
 											}
 											return servSaldoRep.save(nuevoSaldo)
 													.flatMap(saldoW -> {
@@ -110,6 +120,19 @@ public class MovimientosServiceImpl implements MovimientoService {
 							});				
 				});
 		return ModelMapperUtils.mapToMono(transaccionNueva, TransaccionRes.class);
+	}
+	
+
+	@Override
+	public Flux<TransaccionRes> getAllTransaccionByProductID(String idProducto) {
+		return getProdcuctosApi(idProducto)
+				.flux()
+				.flatMap(productoApi ->{
+					return mongoOperations.find(servMovRepo.getDatosPorCodigoYFechaActualY3MesesAtrasQuery(idProducto),Transaccion.class)
+							.flatMap(entidad -> {
+								return Mono.just(ModelMapperUtils.map(entidad, TransaccionRes.class)).flux();
+							});
+				});
 	}
 
 }
