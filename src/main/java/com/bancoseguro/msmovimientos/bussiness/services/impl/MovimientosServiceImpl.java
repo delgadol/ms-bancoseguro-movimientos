@@ -44,6 +44,14 @@ public class MovimientosServiceImpl implements MovimientoService {
         this.mongoOperations = mongoOperations;
     }
     
+    
+    /**
+     * Obtiene información de un producto desde una API externa.
+     *
+     * @param idProducto el identificador del producto
+     * @return un Mono que emite el objeto Producto obtenido desde la API
+     */
+    
     private Mono<Producto> getProdcuctosApi(String idProducto){
 		return webClient.get()
                 .uri(String.format("http://localhost:8086/v1/productos/%s", idProducto))
@@ -55,7 +63,13 @@ public class MovimientosServiceImpl implements MovimientoService {
                 });
 	}
     
-        
+     
+    /**
+     * Obtiene el saldo de un producto específico.
+     *
+     * @param idProducto el identificador del producto
+     * @return un Mono que emite el objeto SaldoRes del producto
+     */
     
     @Override
 	public Mono<SaldoRes> getProductBalance(String idProdcuto) {
@@ -68,7 +82,12 @@ public class MovimientosServiceImpl implements MovimientoService {
 				});
 	}
 
-    
+    /**
+     * Obtiene todos los saldos relacionados a un cliente dado.
+     *
+     * @param idCliente el identificador del cliente
+     * @return un Flux que emite objetos SaldoRes
+     */
 	@Override
 	public Flux<SaldoRes> getAllBalanceByClientId(String idCliente) {
 		return servSaldoRep.findAllByIdPersona(idCliente)
@@ -76,6 +95,13 @@ public class MovimientosServiceImpl implements MovimientoService {
 					return Mono.just(ModelMapperUtils.map(saldoDisp, SaldoRes.class)).flux();
 				});
 	}
+	
+	/**
+	 * Crea una nueva transacción con la información proporcionada.
+	 *
+	 * @param transaccion la información de la transacción a crear
+	 * @return un Mono que emite el objeto TransaccionRes resultante
+	 */
 
 	@Override
 	public Mono<TransaccionRes> postTransaccion(InfoTransacionReq transaccion) {
@@ -123,6 +149,13 @@ public class MovimientosServiceImpl implements MovimientoService {
 	}
 	
 
+	/**
+	 * Obtiene todas las transacciones relacionadas a un producto dado.
+	 *
+	 * @param idProducto el identificador del producto
+	 * @return un Flux que emite objetos TransaccionRes
+	 */
+	
 	@Override
 	public Flux<TransaccionRes> getAllTransaccionByProductID(String idProducto) {
 		return getProdcuctosApi(idProducto)

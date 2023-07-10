@@ -24,23 +24,47 @@ public class MovimientosRestApi {
 	@Autowired
 	private MovimientoService servTransaccion ;
 	
+	/**
+	 * Obtiene el saldo de un producto específico.
+	 *
+	 * @param idProducto el identificador del producto
+	 * @return un Mono que emite el objeto SaldoRes del producto
+	 */
+	
 	@GetMapping("/{idProducto}/saldo")
 	public Mono<SaldoRes> getProductBalance(@PathVariable(name="idProducto") String idProdcuto){
 		return servTransaccion.getProductBalance(idProdcuto);
 	}
 	
 	
+	/**
+	 * Obtiene todos los saldos relacionados a un cliente dado.
+	 *
+	 * @param idCliente el identificador del cliente
+	 * @return un Flux que emite objetos SaldoRes
+	 */
 	@GetMapping("/clientes/{idCliente}/resumenes")
 	public Flux<SaldoRes> getAllBalanceByClientId(@PathVariable(name="idCliente") String idCliente){
 		return servTransaccion.getAllBalanceByClientId(idCliente);
 	}
 	
-	
+	/**
+	 * Crea una nueva transacción con la información proporcionada.
+	 *
+	 * @param transaccion la información de la transacción a crear
+	 * @return un Mono que emite el objeto TransaccionRes resultante
+	 */
 	@PostMapping("")
 	public Mono<TransaccionRes> postTransaccion(@Valid @RequestBody InfoTransacionReq transaccion){
 		return servTransaccion.postTransaccion(transaccion);
 	}
 	
+	/**
+	 * Obtiene todas las transacciones relacionadas a un producto dado.
+	 *
+	 * @param idProducto el identificador del producto
+	 * @return un Flux que emite objetos TransaccionRes
+	 */	
 	@GetMapping("/{idProducto}")
 	public Flux<TransaccionRes> getAllTransaccionByProductID(@PathVariable(name="idProducto") String idProducto){
 		return servTransaccion.getAllTransaccionByProductID(idProducto);

@@ -12,6 +12,10 @@ import com.bancoseguro.msmovimientos.utils.TipoProducto;
 
 import lombok.Data;
 
+/**
+ * Representa una transacción.
+ * La clase Transaccion es una entidad que se mapea a la colección "movimientos" en la base de datos.
+ */
 @Document(collection = "movimientos")
 @Data
 public class Transaccion {
